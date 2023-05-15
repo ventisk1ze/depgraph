@@ -1,6 +1,7 @@
-from collections import TypedDict
+from typing import TypedDict
 
 
 class ImportDict(TypedDict):
     import_name: str
     import_type: str
+    full_path: str
