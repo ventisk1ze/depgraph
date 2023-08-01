@@ -10,17 +10,21 @@ class Project():
             for f in filenames:
                 all_files.append(os.path.join(parent_path, f))
         self.file_paths = [x for x in all_files if x.endswith('.py')]
-        self.import_names = [x.split('\\')[-1].split('.')[0] for x in self.file_paths]
+        self.import_names = [self._get_file_name(x) for x in self.file_paths]
 
-    def _get_file_imports(self, file_path: str) -> List[str]:
-        with open(file_path, 'r') as pythonfile:
+    @staticmethod
+    def _get_file_name(file):
+        return file.split('\\')[-1].split('.')[0]
+    
+    def _get_file_imports(self, file_path: str) -> FileDict:
+        with open(file_path, 'r', encoding='utf-8') as pythonfile:
             imports = [
                 line.strip().split(' ')[1] 
                 for line in pythonfile.readlines() 
                 if line.startswith('import') or line.startswith('from')
             ]
         file: FileDict = {
-            'file_name': file.split('\\')[-1].split('.')[0],
+            'file_name': self._get_file_name(file_path),
             'imports': [
                 ImportDict(
                     import_name=import_name, 
@@ -30,4 +34,8 @@ class Project():
                 ],
             'file_path': file_path
             }
+        return file
     
+    def get_imports(self) -> dict:
+        self.imports = {self._get_file_name(path):self._get_file_imports(path) for path in self.file_paths}
+        return self.imports

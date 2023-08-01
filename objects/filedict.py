@@ -1,5 +1,5 @@
 from typing import TypedDict, List
-from importdict import ImportDict
+from objects.importdict import ImportDict
 
 
 class FileDict(TypedDict):
