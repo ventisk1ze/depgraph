@@ -1,7 +1,8 @@
-from typing import TypedDict, Tuple
+from typing import TypedDict, List
+from importdict import ImportDict
 
 
 class FileDict(TypedDict):
     file_name: str
-    imports: Tuple(str, str)
+    imports: List[ImportDict]
     file_path: str
