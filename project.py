@@ -19,10 +19,11 @@ class Project():
     def _get_file_imports(self, file_path: str) -> FileDict:
         with open(file_path, 'r', encoding='utf-8') as pythonfile:
             imports = [
-                line.strip().split(' ')[1] 
+                line.strip().split(' ')[1]
                 for line in pythonfile.readlines() 
                 if line.startswith('import') or line.startswith('from')
             ]
+            imports = [x.split('.')[1] if '.' in x else x for x in imports]
         file: FileDict = {
             'file_name': self._get_file_name(file_path),
             'imports': [
