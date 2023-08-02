@@ -23,7 +23,7 @@ class Project():
                 for line in pythonfile.readlines() 
                 if line.startswith('import') or line.startswith('from')
             ]
-            imports = [x.split('.')[1] if '.' in x else x for x in imports]
+            imports = [x.split('.')[-1] if '.' in x else x for x in imports]
         file: FileDict = {
             'file_name': self._get_file_name(file_path),
             'imports': [
