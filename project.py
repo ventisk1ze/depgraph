@@ -17,11 +17,11 @@ class Project():
         return file.split('\\')[-1].split('.')[0]
     
     def _get_file_imports(self, file_path: str) -> FileDict:
-        with open(file_path, 'r', encoding='utf-8') as pythonfile:
+        with open(file_path, 'r', encoding='utf-8', errors='replace') as pythonfile:
             imports = [
                 line.strip().split(' ')[1]
                 for line in pythonfile.readlines() 
-                if line.startswith('import') or line.startswith('from')
+                if line.startswith('import ') or line.startswith('from ')
             ]
             imports = [x.split('.')[-1] if '.' in x else x for x in imports]
         file: FileDict = {
