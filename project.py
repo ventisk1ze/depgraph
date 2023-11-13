@@ -1,10 +1,14 @@
 import os
+import re
+import toml
 from typing import List
 from objects.importdict import ImportDict
 from objects.filedict import FileDict
 
 class Project():
     def __init__(self, directory) -> None:
+        self.directory = directory
+
         all_files = []
         for parent_path, _, filenames in os.walk(directory):
             for f in filenames:
@@ -13,8 +17,26 @@ class Project():
         self.import_names = [self._get_file_name(x) for x in self.file_paths]
 
     @staticmethod
-    def _get_file_name(file):
+    def _get_file_name(file) -> List:
         return file.split('\\')[-1].split('.')[0]
+    
+    #We can get dependencies names from files like requirements.txt, pyproject.toml and so on
+    #We deem them external dependencies at obtaining
+    #This is also a workaround for instances of giving the internal modules names of well-known third-party packages(pandas, numpy, etc.)
+    def _get_project_dependencies(self) -> List:
+        if 'requirements.txt' in os.listdir(self.directory):
+            return self._parse_requirements(os.path.join(self.directory, 'requirements.txt'))
+        if 'pyproject.toml' in os.listdir(self.directory):
+            pass
+
+    @staticmethod
+    def _parse_requirements(req_file) -> List:
+        with open(req_file, mode='r') as f:
+            return [*map(lambda x: re.findall(r'(\w+)', x)[0], f.readlines())]
+
+    @staticmethod
+    def _parse_pyproject(pyproject_file)-> List:
+        pass
     
     def _get_file_imports(self, file_path: str) -> FileDict:
         with open(file_path, 'r', encoding='utf-8', errors='replace') as pythonfile:
@@ -40,5 +62,7 @@ class Project():
         return file
     
     def get_imports(self) -> dict:
-        self.imports = {self._get_file_name(path):self._get_file_imports(path) for path in self.file_paths}
+        self.imports = {self._get_file_name(path):self._get_file_imports(path) 
+                        for path 
+                        in self.file_paths}
         return self.imports
