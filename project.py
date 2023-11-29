@@ -1,13 +1,13 @@
 import os
 import re
-import toml
 from typing import List
-from objects.importdict import ImportDict
 from objects.filedict import FileDict
+from objects.importdict import ImportDict
 
 class Project():
-    def __init__(self, directory) -> None:
+    def __init__(self, directory, debug: bool) -> None:
         self.directory = directory
+        self.debug = debug
 
         all_files = []
         for parent_path, _, filenames in os.walk(directory):
@@ -53,7 +53,9 @@ class Project():
                 ImportDict(
                     import_name=import_name, 
                     import_type= 'internal' 
-                    if import_name in self.import_names else 'external')
+                    if import_name in self.import_names else 'external',
+                    import_graph_color = 'red' 
+                    if import_name in self.import_names else 'blue')
                 for import_name in imports
                 ],
             'file_path': file_path
@@ -62,7 +64,10 @@ class Project():
         return file
     
     def get_imports(self) -> dict:
-        self.imports = {self._get_file_name(path):self._get_file_imports(path) 
-                        for path 
-                        in self.file_paths}
-        return self.imports
+        if self.debug:
+            self.imports = {self._get_file_name(path):self._get_file_imports(path) 
+                            for path 
+                            in self.file_paths}
+            return self.imports
+        
+        return [self._get_file_imports(path) for path in self.file_paths]

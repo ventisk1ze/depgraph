@@ -1,17 +1,12 @@
-import os
 import json
-import argparse
 from project import Project
+from graph import Graph
+import matplotlib.pyplot as plt
+import networkx as nx
 
-parser = argparse.ArgumentParser(
-    prog='Depgraph',
-    description='Python module for drawing graph dependencies',
-    epilog='Have fun'
-)
+p = Project(r'C:\Users\User\Desktop\Programming\pm4py-core', debug=False)
 
-parser.add_argument('project_path')
+g = Graph(p.get_imports())
 
-p = Project(r'C:\Users\User\Desktop\Programming\pm4py-core')
-
-with open('./test.json', 'w') as file:
-    json.dump(p.get_imports(), file, indent=4, ensure_ascii=False)
+nx.draw(g.create_graph(), with_labels=True)
+plt.show()
