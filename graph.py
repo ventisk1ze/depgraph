@@ -8,7 +8,7 @@ class Graph:
 
     @staticmethod
     def create_edges(fd: FileDict) -> List:
-        return [(fd['file_name'], i['import_name'], {'color': i['import_graph_color']}) for i in fd['imports']]
+        return [(fd['file_name'], i['import_name']) for i in fd['imports']]
     
     def create_graph(self):
         edges = []
@@ -16,4 +16,3 @@ class Graph:
             edges.extend(self.create_edges(fd))
         self.graph = nx.DiGraph(edges)
         return self.graph
-    

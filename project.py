@@ -53,9 +53,7 @@ class Project():
                 ImportDict(
                     import_name=import_name, 
                     import_type= 'internal' 
-                    if import_name in self.import_names else 'external',
-                    import_graph_color = 'red' 
-                    if import_name in self.import_names else 'blue')
+                    if import_name in self.import_names else 'external',)
                 for import_name in imports
                 ],
             'file_path': file_path
