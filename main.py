@@ -13,8 +13,8 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument('project', help='Path to project')
-parser.add_argument('-d', '--debug', action='store_true')
-parser.add_argument('-l', '--logging', action='store_true')
+parser.add_argument('-d', '--debug', action='store_true', help='Activate debug mode')
+parser.add_argument('-l', '--logging', action='store_true', help='Enable logging')
 
 args = parser.parse_args()
 

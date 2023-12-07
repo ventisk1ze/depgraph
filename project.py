@@ -61,11 +61,14 @@ class Project():
         
         return file
     
-    def get_imports(self) -> dict:
+    def get_imports(self) -> List[FileDict]:
         if self.debug:
-            self.imports = {self._get_file_name(path):self._get_file_imports(path) 
+            import json
+            import_dicts = {self._get_file_name(path):self._get_file_imports(path) 
                             for path 
                             in self.file_paths}
-            return self.imports
+            with open('./imports.json', 'w+', encoding='utf8') as jsonfile:
+                json.dump(import_dicts, jsonfile, indent=4, ensure_ascii=False)
+            return [self._get_file_imports(path) for path in self.file_paths]
         
         return [self._get_file_imports(path) for path in self.file_paths]
